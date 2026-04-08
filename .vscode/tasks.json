@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "convert-grammar",
+            "type": "shell",
+            "command": "npm run convert-grammar",
+            "problemMatcher": []
+        }
+    ]
+}

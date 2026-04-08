@@ -30,5 +30,12 @@
                 "path": "./syntaxes/spwn.tmLanguage.json"
             }
         ]
+    },
+    "scripts": {
+        "convert-grammar": "npx js-yaml syntaxes/spwn.tmLanguage.yml > syntaxes/spwn.tmLanguage.json",
+        "vscode:prepublish": "npm run convert-grammar"
+    },
+    "devDependencies": {
+        "js-yaml": "^4.1.1"
     }
 }
