@@ -1,3 +1,4 @@
+# Based a bit on the original grammar.
 $schema: https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
 name: SPWN
 
@@ -11,6 +12,21 @@ repository:
             - include: "#strings"
             - include: "#numbers"
 
+            - comment: "Builtin identifiers"
+              match: "\\$"
+              name: "constant.language.spwn"
+
+            - comment: "Type identifiers"
+              match: "@[a-zA-Z_]\\w*"
+              name: "support.type.spwn"
+            
+            - comment: "Constant keywords"
+              match: "\\b(true|false|null|trigger|obj|self)\\b"
+              name: "constant.language.spwn"
+
+            - include: "#keywords"
+            - include: "#operators"
+
     comments:
         patterns:
             - comment: Block comments
@@ -19,7 +35,7 @@ repository:
               captures:
                   "1": { name: punctuation.definition.comment.spwn }
               name: comment.block.spwn
-              
+
             - comment: Line comments
               begin: //
               beginCaptures:
@@ -34,7 +50,7 @@ repository:
               beginCaptures:
                   "1": { name: storage.type.string.spwn }
                   "2": { name: punctuation.definition.string.begin.spwn }
-              end: "(\\2)(\n)"
+              end: "(\\2)|(\n)"
               endCaptures:
                   "1": { name: punctuation.definition.string.end.spwn }
                   "2": { name: invalid.illegal.unclosed-string.spwn }
@@ -49,6 +65,7 @@ repository:
                   "1": { name: punctuation.definition.string.end.spwn }
                   "2": { name: invalid.illegal.unclosed-string.spwn }
               name: "string.quoted.spwn"
+
     numbers:
         patterns:
             - comment: "Group, item, color, and block ID literals"
@@ -79,5 +96,57 @@ repository:
             - comment: "Integer literal"
               match: "\\b(\\d+)\\b"
               name: "constant.numeric.dec.spwn"
+
+    keywords:
+        patterns:
+            - comment: "Control keywords"
+              match: "\\b(return|impl|for|in|is|has|throw|if|else|switch|match|case|break|continue|while|obj|trigger|import|extract|type|sync)\\b"
+              name: keyword.control.spwn
+
+    operators:
+        patterns:
+            - comment: "Return operator"
+              match: "->"
+              name: keyword.operator.relational.spwn
+
+            - comment: "Lambda operator"
+              match: "=>"
+              name: storage.type.function.arrow.spwn
+            
+            - comment: "Swap operator"
+              match: "<=>"
+              name: keyword.operator.assignment.spwn
+
+            - comment: "Increment operator"
+              match: "\\+\\+"
+              name: keyword.operator.increment.spwn
+
+            - comment: "Decrement operator"
+              match: "\\-\\-"
+              name: keyword.operator.decrement.spwn
+
+            - comment: "Comparison operators"
+              match: "(==|!=|>=|<=|>|<)"
+              name: keyword.operator.comparison.spwn
+            
+            - comment: "Logical operators"
+              match: "(\\|\\||&&|!)"
+              name: keyword.operator.logical.spwn
+
+            - comment: "Assignment operators"
+              match: "(=|\\+=|\\-=|\\*=|\\/=|\\^=|%=|\\/%=)"
+              name: keyword.operator.assignment.spwn
+
+            - comment: "Arithmetic operators"
+              match: "(\\+|\\-|\\*\\*|\\*|\\/%|\\/|\\^|%|\\|)"
+              name: keyword.operator.arithmetic.spwn
+            
+            - comment: "Range operator"
+              match: "\\.\\."
+              name: "keyword.operator.range.spwn"
+            
+            - comment: "Scope operator"
+              match: "::"
+              name: "keyword.operator.spwn"
 
 scopeName: source.spwn
