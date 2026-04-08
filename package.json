@@ -1,0 +1,34 @@
+{
+    "name": "spwn-language",
+    "displayName": "SPWN Language",
+    "description": "Syntax highlighting for SPWN",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.49.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "spwn",
+                "aliases": [
+                    "SPWN",
+                    "spwn"
+                ],
+                "extensions": [
+                    ".spwn"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "spwn",
+                "scopeName": "source.spwn",
+                "path": "./syntaxes/spwn.tmLanguage.json"
+            }
+        ]
+    }
+}
