@@ -10,7 +10,6 @@ repository:
         patterns:
             - include: "#comments"
             - include: "#strings"
-            - include: "#calls"
             - include: "#numbers"
 
             - comment: "Builtin identifier"
@@ -22,6 +21,11 @@ repository:
               name: "entity.name.type.spwn"
 
             - include: "#properties"
+
+            - comment: "Freestanding call"
+              match: "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
+              name: "entity.name.function.spwn"
+
             - include: "#namespace"
             - include: "#keywords"
             - include: "#operators"
@@ -44,30 +48,19 @@ repository:
 
     properties:
         patterns:
-            - comment: "Property access"
-              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*"
-              captures:
-                  "0":
-                      patterns:
-                          - comment: "Type property"
-                            match: "\\b(type)\\b"
-                            name: "storage.type.spwn"
+            - comment: "Type property"
+              match: "(?<=\\.)(?<!\\.{2})\\b(type)\\b"
+              name: "storage.type.spwn"
 
-                          - include: "#overloads"
+            - include: "#overloads"
 
-                          - comment: "Generic property"
-                            match: "[a-zA-Z_]\\w*"
-                            name: "variable.property.spwn"
-
-    calls:
-        patterns:
             - comment: "Method call"
-              match: "(?<=\\.)(?<![.$]\\.)[a-zA-Z_]\\w*(?=\\s*\\()"
+              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*(?=\\s*\\()"
               name: "entity.name.function.spwn"
 
-            - comment: "Freestanding call"
-              match: "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
-              name: "entity.name.function.spwn"
+            - comment: "Generic property"
+              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*"
+              name: "variable.property.spwn"
 
     strings:
         patterns:
