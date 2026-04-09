@@ -12,17 +12,13 @@ repository:
             - include: "#strings"
             - include: "#numbers"
 
-            - comment: "Builtin identifiers"
+            - comment: "Builtin identifier"
               match: "\\$"
               name: "constant.language.spwn"
 
             - comment: "Type identifiers"
               match: "@[a-zA-Z_]\\w*"
               name: "support.type.spwn"
-            
-            - comment: "Constant keywords"
-              match: "\\b(true|false|null|trigger|obj|self)\\b"
-              name: "constant.language.spwn"
 
             - include: "#keywords"
             - include: "#operators"
@@ -67,7 +63,7 @@ repository:
               name: "string.quoted.spwn"
               patterns:
                   - include: "#escapes"
-                  
+
     escapes:
         patterns:
             - comment: "Escape sequences"
@@ -111,9 +107,29 @@ repository:
 
     keywords:
         patterns:
+            - comment: "Constant keywords"
+              match: "\\b(true|false|null|self)\\b"
+              name: "constant.language.spwn"
+      
             - comment: "Control keywords"
-              match: "\\b(return|impl|for|in|is|has|throw|if|else|switch|match|case|break|continue|while|obj|trigger|import|extract|type|sync)\\b"
+              match: "\\b(if|else|while|for|in|is|has|break|continue|match|switch|case|return)\\b"
               name: keyword.control.spwn
+
+            - comment: "Error keywords"
+              match: "\\b(throw)\\b"
+              name: keyword.control.exception.spwn
+
+            - comment: "Type keywords"
+              match: "\\b(impl|type|obj|trigger)\\b"
+              name: storage.type.spwn
+
+            - comment: "Library keywords"
+              match: "\\b(import|extract)\\b"
+              name: keyword.control.import.spwn
+
+            - comment: "Unused keywords"
+              match: "\\b(sync)\\b"
+              name: keyword.other.spwn
 
     operators:
         patterns:
