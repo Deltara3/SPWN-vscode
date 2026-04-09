@@ -26,18 +26,18 @@ repository:
 
     comments:
         patterns:
-            - comment: Block comments
-              begin: /\*
-              end: \*/
+            - comment: "Block comments"
+              begin: "/\\*"
+              end: "\\*/"
               captures:
-                  "1": { name: punctuation.definition.comment.spwn }
-              name: comment.block.spwn
+                  "1": { name: "punctuation.definition.comment.spwn" }
+              name: "comment.block.spwn"
 
-            - comment: Line comments
-              begin: //
+            - comment: "Line comments"
+              begin: "//"
               beginCaptures:
-                  "1": { name: punctuation.definition.comment.spwn }
-              end: $
+                  "1": { name: "punctuation.definition.comment.spwn" }
+              end: "$"
               name: "comment.line.spwn"
 
     strings:
@@ -45,22 +45,22 @@ repository:
             - comment: "Prefixed string"
               begin: "\\b(r|u|64)(['\"])"
               beginCaptures:
-                  "1": { name: storage.type.string.spwn }
-                  "2": { name: punctuation.definition.string.begin.spwn }
+                  "1": { name: "storage.type.string.spwn" }
+                  "2": { name: "punctuation.definition.string.begin.spwn" }
               end: "(\\2)|(\n)"
               endCaptures:
-                  "1": { name: punctuation.definition.string.end.spwn }
-                  "2": { name: invalid.illegal.unclosed-string.spwn }
-              name: string.quoted.spwn
+                  "1": { name: "punctuation.definition.string.end.spwn" }
+                  "2": { name: "invalid.illegal.unclosed-string.spwn" }
+              name: "string.quoted.spwn"
 
             - comment: "String"
               begin: "(['\"])"
               beginCaptures:
-                  "1": { name: punctuation.definition.string.begin.spwn }
+                  "1": { name: "punctuation.definition.string.begin.spwn" }
               end: "(\\1)|(\n)"
               endCaptures:
-                  "1": { name: punctuation.definition.string.end.spwn }
-                  "2": { name: invalid.illegal.unclosed-string.spwn }
+                  "1": { name: "punctuation.definition.string.end.spwn" }
+                  "2": { name: "invalid.illegal.unclosed-string.spwn" }
               name: "string.quoted.spwn"
               patterns:
                   - include: "#escapes"
@@ -80,27 +80,27 @@ repository:
             - comment: "Group, item, color, and block ID literals"
               match: "(?<![a-zA-Z_])(\\d+|\\?)([gbic])\\b"
               captures:
-                  "1": { name: constant.numeric.id.spwn }
-                  "2": { name: storage.type.number.spwn }
+                  "1": { name: "constant.numeric.id.spwn" }
+                  "2": { name: "storage.type.number.spwn" }
               name: "constant.numeric.id.spwn"
 
             - comment: "Hexadecimal literal"
               match: "\\b(0x)([0-9a-fA-F][0-9a-fA-F_]+)\\b"
               captures:
-                  "1": { name: storage.type.number.spwn }
-                  "2": { name: constant.numeric.hex.spwn }
+                  "1": { name: "storage.type.number.spwn" }
+                  "2": { name: "constant.numeric.hex.spwn" }
 
             - comment: "Octal literal"
               match: "\\b(0o)([0-7][0-7_]+)\\b"
               captures:
-                  "1": { name: storage.type.number.spwn }
-                  "2": { name: constant.numeric.oct.spwn }
+                  "1": { name: "storage.type.number.spwn" }
+                  "2": { name: "constant.numeric.oct.spwn" }
 
             - comment: "Binary literal"
               match: "\\b(0b)([01][01_]+)\\b"
               captures:
-                  "1": { name: storage.type.number.spwn }
-                  "2": { name: constant.numeric.bin.spwn }
+                  "1": { name: "storage.type.number.spwn" }
+                  "2": { name: "constant.numeric.bin.spwn" }
 
             - comment: "Integer literal"
               match: "\\b(\\d[\\d_]*)\\b"
@@ -111,20 +111,20 @@ repository:
             - comment: "Namespace segment"
               match: "(::)([a-zA-Z_]\\w*)(?=::)"
               captures:
-                  "1": { name: punctuation.accessor.spwn }
-                  "2": { name: entity.name.namespace.spwn }
+                  "1": { name: "punctuation.accessor.spwn" }
+                  "2": { name: "entity.name.namespace.spwn" }
 
             - comment: "Namespace function call"
               match: "(::)([a-zA-Z_]\\w*)(?=\\s*\\()"
               captures:
-                  "1": { name: punctuation.accessor.spwn }
-                  "2": { name: entity.name.function.spwn }
+                  "1": { name: "punctuation.accessor.spwn" }
+                  "2": { name: "entity.name.function.spwn" }
 
             - comment: "Namespace member access"
               match: "(::)([a-zA-Z_]\\w*)"
               captures:
-                  "1": { name: punctuation.accessor.spwn }
-                  "2": { name: variable.other.member.spwn }
+                  "1": { name: "punctuation.accessor.spwn" }
+                  "2": { name: "variable.other.member.spwn" }
 
     keywords:
         patterns:
@@ -134,61 +134,61 @@ repository:
       
             - comment: "Control keywords"
               match: "\\b(if|else|while|for|in|is|has|break|continue|match|switch|case|return)\\b"
-              name: keyword.control.spwn
+              name: "keyword.control.spwn"
 
             - comment: "Error keywords"
               match: "\\b(throw|error)\\b"
-              name: keyword.control.exception.spwn
+              name: "keyword.control.exception.spwn"
 
             - comment: "Type keywords"
               match: "\\b(impl|type|obj|trigger)\\b"
-              name: storage.type.spwn
+              name: "storage.type.spwn"
 
             - comment: "Library keywords"
               match: "\\b(import|extract)\\b"
-              name: keyword.control.import.spwn
+              name: "keyword.control.import.spwn"
 
             - comment: "Reserved keywords"
               match: "\\b(sync)\\b"
-              name: keyword.other.spwn
+              name: "keyword.other.spwn"
 
     operators:
         patterns:
             - comment: "Return operator"
               match: "->"
-              name: keyword.operator.relational.spwn
+              name: "keyword.operator.relational.spwn"
 
             - comment: "Lambda operator"
               match: "=>"
-              name: storage.type.function.arrow.spwn
+              name: "storage.type.function.arrow.spwn"
             
             - comment: "Swap operator"
               match: "<=>"
-              name: keyword.operator.assignment.spwn
+              name: "keyword.operator.assignment.spwn"
 
             - comment: "Increment operator"
               match: "\\+\\+"
-              name: keyword.operator.increment.spwn
+              name: "keyword.operator.increment.spwn"
 
             - comment: "Decrement operator"
               match: "\\-\\-"
-              name: keyword.operator.decrement.spwn
+              name: "keyword.operator.decrement.spwn"
 
             - comment: "Comparison operators"
               match: "(==|!=|>=|<=|>|<)"
-              name: keyword.operator.comparison.spwn
+              name: "keyword.operator.comparison.spwn"
             
             - comment: "Logical operators"
               match: "(\\|\\||&&|!)"
-              name: keyword.operator.logical.spwn
+              name: "keyword.operator.logical.spwn"
 
             - comment: "Assignment operators"
               match: "(=|\\+=|\\-=|\\*=|\\/=|\\^=|%=|\\/%=)"
-              name: keyword.operator.assignment.spwn
+              name: "keyword.operator.assignment.spwn"
 
             - comment: "Arithmetic operators"
               match: "(\\+|\\-|\\*\\*|\\*|\\/%|\\/|\\^|%|\\|)"
-              name: keyword.operator.arithmetic.spwn
+              name: "keyword.operator.arithmetic.spwn"
             
             - comment: "Range operator"
               match: "\\.\\."
@@ -198,4 +198,4 @@ repository:
               match: "::"
               name: "punctuation.accessor.spwn"
 
-scopeName: source.spwn
+scopeName: "source.spwn"
