@@ -20,6 +20,7 @@ repository:
               match: "@[a-zA-Z_]\\w*"
               name: "entity.name.type.spwn"
 
+            - include: "#namespace"
             - include: "#keywords"
             - include: "#operators"
 
@@ -105,6 +106,26 @@ repository:
               match: "\\b(\\d[\\d_]*)\\b"
               name: "constant.numeric.dec.spwn"
 
+    namespace:
+        patterns:
+            - comment: "Namespace segment"
+              match: "(::)([a-zA-Z_]\\w*)(?=::)"
+              captures:
+                  "1": { name: punctuation.accessor.spwn }
+                  "2": { name: entity.name.namespace.spwn }
+
+            - comment: "Namespace function call"
+              match: "(::)([a-zA-Z_]\\w*)(?=\\s*\\()"
+              captures:
+                  "1": { name: punctuation.accessor.spwn }
+                  "2": { name: entity.name.function.spwn }
+
+            - comment: "Namespace member access"
+              match: "(::)([a-zA-Z_]\\w*)"
+              captures:
+                  "1": { name: punctuation.accessor.spwn }
+                  "2": { name: variable.other.member.spwn }
+
     keywords:
         patterns:
             - comment: "Constant keywords"
@@ -175,6 +196,6 @@ repository:
             
             - comment: "Scope operator"
               match: "::"
-              name: "keyword.operator.spwn"
+              name: "punctuation.accessor.spwn"
 
 scopeName: source.spwn
