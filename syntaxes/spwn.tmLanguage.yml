@@ -12,18 +12,18 @@ repository:
             - include: "#strings"
             - include: "#numbers"
 
-            - comment: "Builtin identifier"
-              match: "\\$"
+            # Builtin table constant.
+            - match: "\\$"
               name: "constant.language.spwn"
 
-            - comment: "Type identifiers"
-              match: "@[a-zA-Z_]\\w*"
+            # Type identifiers.
+            - match: "@[a-zA-Z_]\\w*"
               name: "entity.name.type.spwn"
 
             - include: "#properties"
 
-            - comment: "Freestanding call"
-              match: "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
+            # Freestanding macro calls.
+            - match: "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
               name: "entity.name.function.spwn"
 
             - include: "#namespace"
@@ -32,15 +32,15 @@ repository:
 
     comments:
         patterns:
-            - comment: "Block comments"
-              begin: "/\\*"
+            # Block comments.
+            - begin: "/\\*"
               end: "\\*/"
               captures:
                   "1": { name: "punctuation.definition.comment.spwn" }
               name: "comment.block.spwn"
 
-            - comment: "Line comments"
-              begin: "//"
+            # Single line comments.
+            - begin: "//"
               beginCaptures:
                   "1": { name: "punctuation.definition.comment.spwn" }
               end: "$"
@@ -48,24 +48,24 @@ repository:
 
     properties:
         patterns:
-            - comment: "Type property"
-              match: "(?<=\\.)(?<!\\.{2})\\b(type)\\b"
+            # Type property access.
+            - match: "(?<=\\.)(?<!\\.{2})\\b(type)\\b"
               name: "storage.type.spwn"
 
             - include: "#overloads"
 
-            - comment: "Method call"
-              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*(?=\\s*\\()"
+            # Method calls.
+            - match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*(?=\\s*\\()"
               name: "entity.name.function.spwn"
 
-            - comment: "Generic property"
-              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*"
+            # Generic properties.
+            - match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*"
               name: "variable.property.spwn"
 
     strings:
         patterns:
-            - comment: "Prefixed string"
-              begin: "\\b(r|u|64)(['\"])"
+            # Prefixed strings.
+            - begin: "\\b(r|u|64)(['\"])"
               beginCaptures:
                   "1": { name: "storage.type.string.spwn" }
                   "2": { name: "punctuation.definition.string.begin.spwn" }
@@ -75,8 +75,8 @@ repository:
                   "2": { name: "invalid.illegal.unclosed-string.spwn" }
               name: "string.quoted.spwn"
 
-            - comment: "String"
-              begin: "(['\"])"
+            # Unprefixed strings.
+            - begin: "(['\"])"
               beginCaptures:
                   "1": { name: "punctuation.definition.string.begin.spwn" }
               end: "(\\1)|(\n)"
@@ -89,157 +89,157 @@ repository:
 
     escapes:
         patterns:
-            - comment: "Escape sequences"
-              match: "\\\\([nrt'\"]|u\\{[0-9a-fA-F]{1,6}\\})"
+            # Escape sequences.
+            - match: "\\\\([nrt'\"]|u\\{[0-9a-fA-F]{1,6}\\})"
               name: "constant.character.escape.spwn"
 
-            - comment: "Illegal sequences"
-              match: "\\\\[^nrt'\"\\\\u]|\\\\u(?!\\{[0-9a-fA-F]{1,6}\\})"
+            # Illegal sequences.
+            - match: "\\\\[^nrt'\"\\\\u]|\\\\u(?!\\{[0-9a-fA-F]{1,6}\\})"
               name: "invalid.illegal.escape.spwn"
 
     numbers:
         patterns:
-            - comment: "Group, item, color, and block ID literals"
-              match: "(?<![a-zA-Z_])(\\d+|\\?)([gbic])\\b"
+            # Geometry Dash ID literals.
+            - match: "(?<![a-zA-Z_])(\\d+|\\?)([gbic])\\b"
               captures:
                   "1": { name: "constant.numeric.id.spwn" }
                   "2": { name: "storage.type.number.spwn" }
               name: "constant.numeric.id.spwn"
 
-            - comment: "Hexadecimal literal"
-              match: "\\b(0x)([0-9a-fA-F][0-9a-fA-F_]+)\\b"
+            # Hexadecimal number literals.
+            - match: "\\b(0x)([0-9a-fA-F][0-9a-fA-F_]+)\\b"
               captures:
                   "1": { name: "storage.type.number.spwn" }
                   "2": { name: "constant.numeric.hex.spwn" }
 
-            - comment: "Octal literal"
-              match: "\\b(0o)([0-7][0-7_]+)\\b"
+            # Octal number literals.
+            - match: "\\b(0o)([0-7][0-7_]+)\\b"
               captures:
                   "1": { name: "storage.type.number.spwn" }
                   "2": { name: "constant.numeric.oct.spwn" }
 
-            - comment: "Binary literal"
-              match: "\\b(0b)([01][01_]+)\\b"
+            # Binary number literals.
+            - match: "\\b(0b)([01][01_]+)\\b"
               captures:
                   "1": { name: "storage.type.number.spwn" }
                   "2": { name: "constant.numeric.bin.spwn" }
 
-            - comment: "Integer literal"
-              match: "\\b(\\d[\\d_]*)\\b"
+            # Number literals.
+            - match: "\\b(\\d[\\d_]*)\\b"
               name: "constant.numeric.dec.spwn"
 
     namespace:
         patterns:
-            - comment: "Namespace segment"
-              match: "(::)([a-zA-Z_]\\w*)(?=::)"
+            # Namespace segments.
+            - match: "(::)([a-zA-Z_]\\w*)(?=::)"
               captures:
                   "1": { name: "punctuation.accessor.spwn" }
                   "2": { name: "entity.name.namespace.spwn" }
 
-            - comment: "Namespace function call"
-              match: "(::)([a-zA-Z_]\\w*)(?=\\s*\\()"
+            # Namespace function calls.
+            - match: "(::)([a-zA-Z_]\\w*)(?=\\s*\\()"
               captures:
                   "1": { name: "punctuation.accessor.spwn" }
                   "2": { name: "entity.name.function.spwn" }
 
-            - comment: "Namespace member access"
-              match: "(::)([a-zA-Z_]\\w*)"
+            # Namespace member access.
+            - match: "(::)([a-zA-Z_]\\w*)"
               captures:
                   "1": { name: "punctuation.accessor.spwn" }
                   "2": { name: "variable.property.spwn" }
 
     keywords:
         patterns:
-            - comment: "Constant keywords"
-              match: "\\b(true|false|null|self)\\b"
+            # Constants.
+            - match: "\\b(true|false|null|self)\\b"
               name: "constant.language.spwn"
       
-            - comment: "Control keywords"
-              match: "\\b(let|if|else|while|for|in|is|has|break|continue|match|switch|case|return)\\b"
+            # Control flow.
+            - match: "\\b(let|if|else|while|for|in|is|has|break|continue|match|switch|case|return)\\b"
               name: "keyword.control.spwn"
 
-            - comment: "Error keywords"
-              match: "\\b(throw|error)\\b"
+            # Error handling.
+            - match: "\\b(throw|error)\\b"
               name: "keyword.control.exception.spwn"
 
-            - comment: "Type keywords"
-              match: "\\b(impl|type|obj|trigger)\\b"
+            # Type implementation.
+            - match: "\\b(impl|type|obj|trigger)\\b"
               name: "storage.type.spwn"
 
-            - comment: "Library keywords"
-              match: "\\b(import|extract)\\b"
+            # Library handling.
+            - match: "\\b(import|extract)\\b"
               name: "keyword.control.import.spwn"
 
-            - comment: "Reserved keywords"
-              match: "\\b(sync)\\b"
+            # Reserved.
+            - match: "\\b(sync)\\b"
               name: "keyword.other.spwn"
 
     operators:
         patterns:
-            - comment: "Return operator"
-              match: "->"
+            # Return operator.
+            - match: "->"
               name: "keyword.operator.relational.spwn"
 
-            - comment: "Lambda operator"
-              match: "=>"
+            # Lambda operator.
+            - match: "=>"
               name: "storage.type.function.arrow.spwn"
             
-            - comment: "Swap operator"
-              match: "<=>"
+            # Swap operator.
+            - match: "<=>"
               name: "keyword.operator.assignment.spwn"
 
-            - comment: "Increment operator"
-              match: "\\+\\+"
+            # Increment operator.
+            - match: "\\+\\+"
               name: "keyword.operator.increment.spwn"
 
-            - comment: "Decrement operator"
-              match: "\\-\\-"
+            # Decrement operator.
+            - match: "\\-\\-"
               name: "keyword.operator.decrement.spwn"
 
-            - comment: "Comparison operators"
-              match: "(==|!=|>=|<=|>|<)"
+            # Comparison operators.
+            - match: "(==|!=|>=|<=|>|<)"
               name: "keyword.operator.comparison.spwn"
             
-            - comment: "Logical operators"
-              match: "(\\|\\||&&|!)"
+            # Logical operators.
+            - match: "(\\|\\||&&|!)"
               name: "keyword.operator.logical.spwn"
 
-            - comment: "Assignment operators"
-              match: "(=|\\+=|\\-=|\\*=|\\/=|\\^=|%=|\\/%=)"
+            # Assignment operators.
+            - match: "(=|\\+=|\\-=|\\*=|\\/=|\\^=|%=|\\/%=)"
               name: "keyword.operator.assignment.spwn"
 
-            - comment: "Arithmetic operators"
-              match: "(\\+|\\-|\\*\\*|\\*|\\/%|\\/|\\^|%|\\|)"
+            # Arithmetic operators.
+            - match: "(\\+|\\-|\\*\\*|\\*|\\/%|\\/|\\^|%|\\|)"
               name: "keyword.operator.arithmetic.spwn"
             
-            - comment: "Range operator"
-              match: "\\.\\."
+            # Range operator.
+            - match: "\\.\\."
               name: "keyword.operator.range.spwn"
             
-            - comment: "Scope operator"
-              match: "::"
+            # Scope operator.
+            - match: "::"
               name: "punctuation.accessor.spwn"
 
     overloads:
         patterns:
-            - comment: "Comparison overloads"
-              match: "\\b_(equal|not_equal|more_or_equal|less_or_equal|more_than|less_than)_\\b"
+            # Comparison overloads.
+            - match: "\\b_(equal|not_equal|more_or_equal|less_or_equal|more_than|less_than)_\\b"
               name: "support.function.magic.spwn"
 
-            - comment: "Logical overloads"
-              match: "\\b_(or|and|not|negate)_\\b"
+            # Logical overloads.
+            - match: "\\b_(or|and|not|negate)_\\b"
               name: "support.function.magic.spwn"
 
-            - comment: "Assignment overloads"
-              match: "\\b_(assign|add|subtract|multiply|divide|exponate|modulate|intdivide|swap)_\\b"
+            # Assignment overloads.
+            - match: "\\b_(assign|add|subtract|multiply|divide|exponate|modulate|intdivide|swap)_\\b"
               name: "support.function.magic.spwn"
 
-            - comment: "Arithmetic overloads"
-              match: "\\b_(plus|minus|times|intdivided_by|divided_by|pow|mod|either|increment|pre_increment|decrement|pre_decrement)_\\b"
+            # Arithmetic overloads.
+            - match: "\\b_(plus|minus|times|intdivided_by|divided_by|pow|mod|either|increment|pre_increment|decrement|pre_decrement)_\\b"
               name: "support.function.magic.spwn"
 
-            - comment: "Other overloads"
-              match: "\\b_(display|as|has|range|unary_range)_\\b"
+            # Other overloads.
+            - match: "\\b_(display|as|has|range|unary_range)_\\b"
               name: "support.function.magic.spwn"
 
 scopeName: "source.spwn"
