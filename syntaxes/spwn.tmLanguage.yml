@@ -116,7 +116,7 @@ repository:
               name: keyword.control.spwn
 
             - comment: "Error keywords"
-              match: "\\b(throw)\\b"
+              match: "\\b(throw|error)\\b"
               name: keyword.control.exception.spwn
 
             - comment: "Type keywords"
@@ -127,7 +127,7 @@ repository:
               match: "\\b(import|extract)\\b"
               name: keyword.control.import.spwn
 
-            - comment: "Unused keywords"
+            - comment: "Reserved keywords"
               match: "\\b(sync)\\b"
               name: keyword.other.spwn
 
