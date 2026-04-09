@@ -146,7 +146,7 @@ repository:
               match: "(::)([a-zA-Z_]\\w*)"
               captures:
                   "1": { name: "punctuation.accessor.spwn" }
-                  "2": { name: "variable.other.member.spwn" }
+                  "2": { name: "variable.property.spwn" }
 
     keywords:
         patterns:
