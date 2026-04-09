@@ -10,6 +10,7 @@ repository:
         patterns:
             - include: "#comments"
             - include: "#strings"
+            - include: "#calls"
             - include: "#numbers"
 
             - comment: "Builtin identifier"
@@ -20,6 +21,7 @@ repository:
               match: "@[a-zA-Z_]\\w*"
               name: "entity.name.type.spwn"
 
+            - include: "#properties"
             - include: "#namespace"
             - include: "#keywords"
             - include: "#operators"
@@ -39,6 +41,33 @@ repository:
                   "1": { name: "punctuation.definition.comment.spwn" }
               end: "$"
               name: "comment.line.spwn"
+
+    properties:
+        patterns:
+            - comment: "Property access"
+              match: "(?<=\\.)(?<!\\.{2})[a-zA-Z_]\\w*"
+              captures:
+                  "0":
+                      patterns:
+                          - comment: "Type property"
+                            match: "\\b(type)\\b"
+                            name: "storage.type.spwn"
+
+                          - include: "#overloads"
+
+                          - comment: "Generic property"
+                            match: "[a-zA-Z_]\\w*"
+                            name: "variable.property.spwn"
+
+    calls:
+        patterns:
+            - comment: "Method call"
+              match: "(?<=\\.)(?<![.$]\\.)[a-zA-Z_]\\w*(?=\\s*\\()"
+              name: "entity.name.function.spwn"
+
+            - comment: "Freestanding call"
+              match: "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
+              name: "entity.name.function.spwn"
 
     strings:
         patterns:
@@ -197,5 +226,27 @@ repository:
             - comment: "Scope operator"
               match: "::"
               name: "punctuation.accessor.spwn"
+
+    overloads:
+        patterns:
+            - comment: "Comparison overloads"
+              match: "\\b_(equal|not_equal|more_or_equal|less_or_equal|more_than|less_than)_\\b"
+              name: "support.function.magic.spwn"
+
+            - comment: "Logical overloads"
+              match: "\\b_(or|and|not|negate)_\\b"
+              name: "support.function.magic.spwn"
+
+            - comment: "Assignment overloads"
+              match: "\\b_(assign|add|subtract|multiply|divide|exponate|modulate|intdivide|swap)_\\b"
+              name: "support.function.magic.spwn"
+
+            - comment: "Arithmetic overloads"
+              match: "\\b_(plus|minus|times|intdivided_by|divided_by|pow|mod|either|increment|pre_increment|decrement|pre_decrement)_\\b"
+              name: "support.function.magic.spwn"
+
+            - comment: "Other overloads"
+              match: "\\b_(display|as|has|range|unary_range)_\\b"
+              name: "support.function.magic.spwn"
 
 scopeName: "source.spwn"
