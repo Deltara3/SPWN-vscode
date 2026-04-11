@@ -4,6 +4,7 @@ scopeName: source.spwn
 includes:
   - comments
   - literals
+  - keywords
 
 patterns:
   - include: '#root'
@@ -13,3 +14,4 @@ repository:
         patterns:
           - include: '#comments'
           - include: '#literals'
+          - include: '#keywords'
