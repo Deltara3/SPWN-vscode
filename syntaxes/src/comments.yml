@@ -12,15 +12,15 @@ repository:
     comment-block:
         patterns:
           - name: comment.block.spwn
-            begin: (/\*)
-            end: (\*/)
+            begin: /\*
+            end: \*/
             captures:
-                1: { name: punctuation.definition.comment.spwn }
+                0: { name: punctuation.definition.comment.spwn }
 
     comment-line:
         patterns:
           - name: comment.line.spwn
-            begin: (//)
+            begin: //
             beginCaptures:
-                1: { name: punctuation.definition.comment.spwn }
+                0: { name: punctuation.definition.comment.spwn }
             end: '$'

@@ -19,12 +19,12 @@ repository:
 
     for-in:
         patterns:
-          - begin: \b(for)\b
+          - begin: \bfor\b
             beginCaptures:
-                1: { name: keyword.control.spwn }
-            end: \b(in)\b
+                0: { name: keyword.control.spwn }
+            end: \bin\b
             endCaptures:
-                1: { name: keyword.control.spwn }
+                0: { name: keyword.control.spwn }
             patterns:
               - include: '#root'
 

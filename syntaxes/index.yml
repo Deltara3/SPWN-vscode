@@ -6,6 +6,7 @@ includes:
   - literals
   - keywords
   - brackets
+  - accessors
   - other
 
 patterns:
