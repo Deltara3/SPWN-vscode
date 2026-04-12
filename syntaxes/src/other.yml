@@ -1,0 +1,27 @@
+scopeName: source.spwn
+
+patterns:
+    - include: '#null'
+
+repository:
+    punctuation:
+        patterns:
+          - name: punctuation.terminator.spwn
+            match: ;
+
+          - name: punctuation.separator.spwn
+            match: ','
+
+          - name: punctuation.accessor.spwn
+            match: '(?<!\.)\.(?!\.)'
+
+          - name: punctuation.accessor.namespace.spwn
+            match: ':(?!:)'
+
+          - name: punctuation.separator.key-value.spwn
+            match: ':'
+
+    type-identifier:
+        patterns:
+          - name: entity.name.type.spwn
+            match: '@[a-zA-Z_]\w*'

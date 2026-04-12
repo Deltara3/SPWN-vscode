@@ -5,6 +5,8 @@ includes:
   - comments
   - literals
   - keywords
+  - brackets
+  - other
 
 patterns:
   - include: '#root'
@@ -15,3 +17,6 @@ repository:
           - include: '#comments'
           - include: '#literals'
           - include: '#keywords'
+          - include: '#type-identifier'
+          - include: '#punctuation'
+          - include: '#brackets'
