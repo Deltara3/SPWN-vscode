@@ -24,6 +24,15 @@ repository:
           - include: '#property-access'
           - include: '#calls'
           - include: '#namespace-access'
+          - include: '#assignment'
           - include: '#punctuation'
           - include: '#brackets'
           - include: '#operators'
+          - include: '#straggling-identifiers'
+
+    # Hack to catch all remaining identifiers, at the cost of a tiny bit of accuracy.
+    # I think the trade off is worth it though.
+    straggling-identifiers:
+        patterns:
+          - name: variable.other.spwn
+            match: \b[a-zA-Z_]\w*\b
