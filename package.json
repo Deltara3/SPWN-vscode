@@ -1,5 +1,6 @@
 {
     "name": "spwn-language",
+    "publisher": "deltara",
     "displayName": "SPWN Language",
     "description": "Syntax highlighting for SPWN",
     "version": "0.1.2",

@@ -80,4 +80,4 @@ repository:
           - match: (::)([a-zA-Z_]\w*)
             captures:
                 1: { name: punctuation.accessor.namespace.spwn }
-                2: { name: variable.property.spwn }
+                2: { name: variable.other.enummember.spwn }
