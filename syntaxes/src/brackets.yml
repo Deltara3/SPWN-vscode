@@ -8,6 +8,7 @@ repository:
         patterns:
           - include: '#trigger-function'
           - include: '#standard-block'
+          - include: '#code-block'
           - include: '#directive-statement'
           - include: '#array-container'
           - include: '#function-definite'
@@ -28,6 +29,56 @@ repository:
 
     standard-block:
         patterns:
+          - begin: (?<!\)\s*)\{
+            beginCaptures:
+                0: { name: punctuation.other.bracket.curly.begin.spwn }
+            end: \}
+            endCaptures:
+                0: { name: punctuation.other.bracket.curly.end.spwn }
+            patterns:
+              - include: '#property-block'
+              - include: '#root'
+
+    property-block:
+        patterns:
+          - begin: \b([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*!\{)
+            beginCaptures:
+                1: { name: entity.name.function.macro.spwn }
+                2: { name: punctuation.separator.key-value.spwn }
+            end: ',|(?=\})|(?=;)'
+            endCaptures:
+                0: { name: punctuation.separator.spwn }
+            patterns:
+            - include: '#root'        
+
+          - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*\()
+            beginCaptures:
+                1:
+                    patterns:
+                      - include: '#overloads'
+
+                      - name: entity.name.function.spwn
+                        match: '[a-zA-Z_]\w*'
+
+                2: { name: punctuation.separator.key-value.spwn }
+            end: ',|(?=\})|(?=;)'
+            endCaptures:
+                0: { name: punctuation.separator.spwn }
+            patterns:
+            - include: '#root'                
+
+          - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)
+            beginCaptures:
+                1: { name: variable.property.spwn }
+                2: { name: punctuation.separator.key-value.spwn }
+            end: ',|(?=\})|(?=;)'
+            endCaptures:
+                0: { name: punctuation.separator.spwn }
+            patterns:
+                - include: '#root'
+
+    code-block:
+        patterns:
           - begin: \{
             beginCaptures:
                 0: { name: punctuation.other.bracket.curly.begin.spwn }
@@ -35,39 +86,6 @@ repository:
             endCaptures:
                 0: { name: punctuation.other.bracket.curly.end.spwn }
             patterns:
-              - begin: (?=\s*\w+\s*:(?!:)|\.{2})
-                end: (?=\})
-                patterns:
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*!\{)
-                    beginCaptures:
-                        1: { name: entity.name.function.macro.spwn }
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ',|(?=\})'
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-                    patterns:
-                    - include: '#root'        
-
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*\()
-                    beginCaptures:
-                        1: { name: entity.name.function.spwn }
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ',|(?=\})'
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-                    patterns:
-                    - include: '#root'                
-
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)
-                    beginCaptures:
-                        1: { name: variable.property.spwn }
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ',|(?=\})'
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-                    patterns:
-                      - include: '#root'
-
               - include: '#root'
 
     directive-statement:

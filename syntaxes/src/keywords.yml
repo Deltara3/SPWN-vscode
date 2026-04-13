@@ -6,7 +6,6 @@ patterns:
 repository:
     keywords:
         patterns:
-          - include: '#for-in'
           - include: '#impl-block'
           - include: '#constant-keywords'
           - include: '#self-keyword'
@@ -15,19 +14,7 @@ repository:
           - include: '#exception-keywords'
           - include: '#type-keywords'
           - include: '#library-keywords'
-          - include: '#pseudo-op-keywords'
           - include: '#reserved-keywords'
-
-    for-in:
-        patterns:
-          - begin: \bfor\b
-            beginCaptures:
-                0: { name: keyword.control.spwn }
-            end: \bin\b
-            endCaptures:
-                0: { name: keyword.control.spwn }
-            patterns:
-              - include: '#root'
 
     impl-block:
         patterns:
@@ -39,52 +26,13 @@ repository:
             patterns:
               - begin: \{
                 beginCaptures:
-                    0: { name: punctuation.other.curly.begin.spwn }
+                    0: { name: punctuation.other.bracket.curly.begin.spwn }
                 end: \}
                 endCaptures:
                     0: { name: punctuation.other.bracket.curly.end.spwn }
                 patterns:
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*!\{)
-                    beginCaptures:
-                        1:
-                            patterns:
-                              - name: entity.name.function.macro.spwn
-                                match: '[a-zA-Z_]\w*'
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ",|(?=\\})"
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-
-                    patterns:
-                      - include: '#root'
-
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*\()
-                    beginCaptures:
-                        1:
-                            patterns:
-                              - include: '#overloads'
-
-                              - name: entity.name.function.spwn
-                                match: '[a-zA-Z_]\w*'
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ",|(?=\\})"
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-
-                    patterns:
-                      - include: '#root'
-                    
-                  - begin: ([a-zA-Z_]\w*)\s*(:)(?!:)
-                    beginCaptures:
-                        1: { name: variable.property.spwn }
-                        2: { name: punctuation.separator.key-value.spwn }
-                    end: ',|(?=\})'
-                    endCaptures:
-                        0: { name: punctuation.separator.spwn }
-
-                    patterns:
-                      - include: '#root'
-
+                  - include: '#property-block'
+                  - include: '#root'
 
     constant-keywords:
         patterns:
@@ -110,7 +58,7 @@ repository:
     control-keywords:
         patterns:
           - name: keyword.control.spwn
-            match: \b(let|if|else|while|for|break|continue|match|return)\b
+            match: \b(let|if|else|while|for|break|continue|match|return|in|is)\b
 
     exception-keywords:
         patterns:
@@ -126,11 +74,6 @@ repository:
         patterns:
           - name: keyword.control.import.spwn
             match: \b(import|extract)\b
-
-    pseudo-op-keywords:
-        patterns:
-          - name: keyword.operator.logical.spwn
-            match: \b(in|is)\b
 
     reserved-keywords:
         patterns:
