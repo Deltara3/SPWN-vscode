@@ -79,7 +79,7 @@ repository:
     other-keywords:
         patterns:
           - name: keyword.other.spwn
-            match: \b(as|in|is)
+            match: \b(as|in|is)\b
 
     reserved-keywords:
         patterns:

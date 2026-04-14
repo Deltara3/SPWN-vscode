@@ -16,7 +16,7 @@ Feel free to create an issue with inaccuracies, bugs or missing syntax.
 ## Release Notes
 
 ## 0.1.5
-- Fixed some properties highlighting as keywords.
+- Fixed the grammar treating some properties, members, or variables as keywords.
 
 ## 0.1.4
 - Fixed `as` not highlighting due to the lack of implementation.
