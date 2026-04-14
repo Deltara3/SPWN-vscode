@@ -15,6 +15,9 @@ Feel free to create an issue with inaccuracies, bugs or missing syntax.
 
 ## Release Notes
 
+## 0.1.8
+- Fixed legacy keyword `has` still being under `keyword.operator.logical`.
+
 ## 0.1.7
 - Fixed the grammar highlighting what was clearly not macros, as macros.
 

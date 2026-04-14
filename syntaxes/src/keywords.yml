@@ -50,7 +50,7 @@ repository:
           - name: keyword.control.deprecated.spwn
             match: \b(switch|case)\b
 
-          - name: keyword.operator.logical.deprecated.spwn
+          - name: keyword.other.deprecated.spwn
             match: \bhas\b
 
           - name: keyword.control.exception.deprecated.spwn
