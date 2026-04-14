@@ -15,6 +15,9 @@ Feel free to create an issue with inaccuracies, bugs or missing syntax.
 
 ## Release Notes
 
+## 0.1.5
+- Fixed some properties highlighting as keywords.
+
 ## 0.1.4
 - Fixed `as` not highlighting due to the lack of implementation.
 - Moved `is` and `in` to `keyword.other`.

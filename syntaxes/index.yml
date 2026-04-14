@@ -4,10 +4,10 @@ scopeName: source.spwn
 includes:
   - comments
   - literals
-  - keywords
   - brackets
   - operators
   - accessors
+  - keywords
   - overloads
   - other
 
@@ -19,11 +19,11 @@ repository:
         patterns:
           - include: '#comments'
           - include: '#literals'
-          - include: '#keywords'
           - include: '#types'
           - include: '#property-access'
           - include: '#calls'
           - include: '#namespace-access'
+          - include: '#keywords'
           - include: '#assignment'
           - include: '#punctuation'
           - include: '#brackets'

@@ -4,6 +4,9 @@ All notable changes to the "spwn-language" extension will be documented in this 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.1.5
+- Fixed some properties highlighting as keywords.
+
 ## 0.1.4
 - Fixed `as` not highlighting due to the lack of implementation.
 - Moved `is` and `in` to `keyword.other`.
