@@ -8,7 +8,8 @@ repository: Mapping<String, Pattern>?
 abstract class Pattern
 
 abstract class Named extends Pattern {
-    name: String?
+    fixed scope: String?
+    name: String? = if (scope == null) null else "\(scope).spwn"
 }
 
 class Match extends Named {
@@ -37,7 +38,6 @@ class Include extends Pattern {
     include: String
 }
 
-class Capture {
-    name: String?
+class Capture extends Named {
     patterns: Listing<Pattern>?
 }
