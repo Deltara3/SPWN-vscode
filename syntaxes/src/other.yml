@@ -39,4 +39,4 @@ repository:
     function-definition:
         patterns:
           - name: entity.name.function.spwn
-            match: \b[a-zA-Z_]\w*(?=\s*=\s*\(.*\)\s*(?:->.*?)?\{)
+            match: \b[a-zA-Z_]\w*(?=\s*=\s*\(.*\)\s*(?:->.*?)?\{[^{}]*\}(?!\s*\())
