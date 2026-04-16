@@ -1,7 +1,7 @@
 extends "schema.pkl"
 
 /// A regex boundary with its captures.
-typealias Boundary = Pair<String(isRegex), CaptureMap>
+typealias Boundary = Pair<String(isRegex), CaptureMap?>
 
 /// Creates a new [Include] pattern.
 /// - [rule]: The name of the rule to reference.
