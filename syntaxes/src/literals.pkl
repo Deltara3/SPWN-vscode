@@ -4,6 +4,7 @@ import "../bindings.pkl" as w
 local function stringBlock(type: String, prefix: String?) = 
     let (prefixed = prefix != null)
     let (multi = type == "unindent")
+    let (raw = type == "raw")
     let (group = if (prefixed) "2" else "1")
 
     w.spanEx(
@@ -20,12 +21,12 @@ local function stringBlock(type: String, prefix: String?) =
         Pair(if (multi) #"(\2)"# else #"(\\#(group))|(\n)"#, new Mapping {
             ["1"] = w.capture("punctuation.definition.string.end")
 
-            when (type != "unindent") {
+            when (!multi) {
                 ["2"] = w.capture("invalid.illegal.unclosed-string")
             }
         }),
         
-        null
+        if (!raw) new Listing { w.include("stringEscapes") } else null
     )
 
 repository {
@@ -33,10 +34,23 @@ repository {
     ["stringUnindent"] = stringBlock("unindent", "u")
     ["stringBase64"] = stringBlock("base64", "64")
     ["stringPlain"] = stringBlock("plain", null)
+
     ["stringLiterals"] = w.group(new Listing {
         w.include("stringRaw")
         w.include("stringUnindent")
         w.include("stringBase64")
         w.include("stringPlain")
+    })
+
+    ["stringEscapes"] = w.group(new Listing {
+        w.match(
+            "constant.character.escape",
+            #"\\([nrt'"]|u\{[0-9a-fA-F]{1,6}\})"#
+        )
+
+        w.match(
+            "invalid.illegal.escape",
+            #"\\[^nrt'"\\u]|\\u(?!\{[0-9a-fA-F]{1,6}\})"#
+        )
     })
 }
