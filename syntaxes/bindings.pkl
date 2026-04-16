@@ -63,6 +63,7 @@ function span(start: Boundary, stop: Boundary) = new Span {
 /// - [stop]: Regex and captures marking the end of the span.
 /// - [pats]: Pattern list to include in this pattern.
 function spanEx(tag: String?, start: Boundary, stop: Boundary, pats: PatternList?) = new Span {
+    scope = tag
     begin = start.first
     beginCaptures = start.second
     end = stop.first
