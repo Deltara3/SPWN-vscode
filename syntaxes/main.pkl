@@ -11,7 +11,7 @@ patterns {
 
 repository {
     ["root"] = w.group(new Listing {
-        w.include("stringLiterals")
+        w.include("literals")
     })
 
     // Merge all files automagically.
