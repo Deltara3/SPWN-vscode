@@ -1,5 +1,6 @@
 amends "schema.pkl"
 import "bindings.pkl" as w
+import* "src/*.pkl" as files
 
 name = "SPWN"
 scopeName = "source.spwn"
@@ -10,6 +11,11 @@ patterns {
 
 repository {
     ["root"] = w.group(new Listing {
-
+        w.include("stringLiterals")
     })
+
+    // Merge all files automagically.
+    for (_, file in files) {
+        ...file.repository!!
+    }
 }

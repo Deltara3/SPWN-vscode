@@ -1,0 +1,42 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+local function stringBlock(type: String, prefix: String?) = 
+    let (prefixed = prefix != null)
+    let (multi = type == "unindent")
+    let (group = if (prefixed) "2" else "1")
+
+    w.spanEx(
+        "string.quoted.\(type)",
+
+        Pair(if (prefixed) #"\b(\#(prefix))(['"])"# else #"(['"])"#, new Mapping {
+            when (prefixed) {
+                ["1"] = w.capture("storage.type.string")
+            }
+
+            [group] = w.capture("punctuation.definition.string.begin")
+        }),
+
+        Pair(if (multi) #"(\2)"# else #"(\\#(group))|(\n)"#, new Mapping {
+            ["1"] = w.capture("punctuation.definition.string.end")
+
+            when (type != "unindent") {
+                ["2"] = w.capture("invalid.illegal.unclosed-string")
+            }
+        }),
+        
+        null
+    )
+
+repository {
+    ["stringRaw"] = stringBlock("raw", "r")
+    ["stringUnindent"] = stringBlock("unindent", "u")
+    ["stringBase64"] = stringBlock("base64", "64")
+    ["stringPlain"] = stringBlock("plain", null)
+    ["stringLiterals"] = w.group(new Listing {
+        w.include("stringRaw")
+        w.include("stringUnindent")
+        w.include("stringBase64")
+        w.include("stringPlain")
+    })
+}
