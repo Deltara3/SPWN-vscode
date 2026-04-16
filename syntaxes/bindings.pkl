@@ -58,10 +58,11 @@ function span(start: Boundary, stop: Boundary) = new Span {
 }
 
 /// Creates a new [Span] pattern with patterns.
+/// - [tag]: TextMate scope to use, without the language suffix.
 /// - [start]: Regex and captures marking the start of the span.
 /// - [stop]: Regex and captures marking the end of the span.
 /// - [pats]: Pattern list to include in this pattern.
-function spanEx(start: Boundary, stop: Boundary, pats: PatternList?) = new Span {
+function spanEx(tag: String?, start: Boundary, stop: Boundary, pats: PatternList?) = new Span {
     begin = start.first
     beginCaptures = start.second
     end = stop.first
