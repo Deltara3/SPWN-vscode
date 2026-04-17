@@ -11,6 +11,7 @@ patterns {
 
 repository {
     ["root"] = w.group(new Listing {
+        w.include("comments")
         w.include("literals")
     })
 

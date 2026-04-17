@@ -1,0 +1,33 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+repository {
+    ["comments"] = w.group(new Listing {
+        w.include("commentBlock")
+        w.include("commentLine")
+    })
+
+    ["commentBlock"] = w.spanEx(
+        "comment.block",
+        Pair(#"/\*"#, new Mapping {
+            ["0"] = w.capture("punctuation.definition.comment.begin")
+        }),
+
+        Pair(#"\*/"#, new Mapping {
+            ["0"] = w.capture("punctuation.definition.comment.end")
+        }),
+
+        null
+    )
+
+    ["commentLine"] = w.spanEx(
+        "comment.line",
+
+        Pair(#"//"#, new Mapping {
+            ["0"] = w.capture("punctuation.definition.comment")
+        }),
+
+        Pair(#"$"#, null),
+        null
+    )
+}
