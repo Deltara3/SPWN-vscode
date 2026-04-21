@@ -5,54 +5,56 @@ hidden keywords = new Mapping {
     ["keyword.control.exception"] = "throw"
     ["variable.language"] = "self"
 
-    ["constant.language"] = keywordListing(List(
-        "true", "false", "null"
-    ))
+    ["constant.language"] = keywordListing(new Listing {
+        "true"
+        "false"
+        "null"
+    })
 
-    ["keyword.control"] = keywordListing(List(
-        "let",
-        "if",
-        "else",
-        "while",
-        "for",
-        "break",
-        "continue",
-        "march",
+    ["keyword.control"] = keywordListing(new Listing {
+        "let"
+        "if"
+        "else"
+        "while"
+        "for"
+        "break"
+        "continue"
+        "march"
         "return"
-    ))
+    })
 
-    ["storage.type"] = keywordListing(List(
-        "type",
-        "impl",
-        "obj",
+    ["storage.type"] = keywordListing(new Listing {
+        "type"
+        "impl"
+        "obj"
         "trigger"
-    ))
+    })
 
-    ["keyword.control.import"] = keywordListing(List(
-        "import",
+    ["keyword.control.import"] = keywordListing(new Listing {
+        "import"
         "extract"
-    ))
+    })
 
-    ["keyword.other"] = keywordListing(List(
-        "as",
-        "in",
+    ["keyword.other"] = keywordListing(new Listing {
+        "as"
+        "in"
         "is"
-    ))
+    })
 
     ["keyword.control.exception.deprecated"] = "error"
 
-    ["keyword.other.deprecated"] = keywordListing(List(
-        "has",
+    ["keyword.other.deprecated"] = keywordListing(new Listing {
+        "has"
         "sync"
-    ))
+    })
 
-    ["keyword.control.deprecated"] = keywordListing(List(
-        "switch",
+    ["keyword.control.deprecated"] = keywordListing(new Listing {
+        "switch"
         "case"
-    ))
+    })
 }
 
-function keywordListing(words: List<String>) = words.join("|")
+function keywordListing(words: Listing<String>) = words.join("|")
 
 repository {
     ["keywords"] = w.group(new Listing {
