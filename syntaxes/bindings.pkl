@@ -71,6 +71,14 @@ function spanEx(tag: String?, start: Boundary, stop: Boundary, pats: PatternList
     patterns = pats
 }
 
+/// Creates an entry for a table.
+/// - [tag]: TextMate scope to use, without the language suffix.
+/// - [words]: A string or list of strings to use.
+function tableListing(tag: String, words: String | Listing<String>) = Pair(
+    tag,
+    if (words is String) words else words.join("|")
+)
+
 /// An ordered triple of elements.
 class Triple {
     first: Any

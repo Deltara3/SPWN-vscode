@@ -1,17 +1,17 @@
 extends "../schema.pkl"
 import "../bindings.pkl" as w
 
-hidden keywords = new Mapping {
-    ["keyword.control.exception"] = "throw"
-    ["variable.language"] = "self"
+hidden keywordTable = new Listing {
+    w.tableListing("keyword.control.exception", "throw")
+    w.tableListing("variable.language", "self")
 
-    ["constant.language"] = keywordListing(new Listing {
+    w.tableListing("constant.language", new Listing {
         "true"
         "false"
         "null"
     })
 
-    ["keyword.control"] = keywordListing(new Listing {
+    w.tableListing("keyword.control", new Listing {
         "let"
         "if"
         "else"
@@ -23,45 +23,43 @@ hidden keywords = new Mapping {
         "return"
     })
 
-    ["storage.type"] = keywordListing(new Listing {
+    w.tableListing("storage.type", new Listing {
         "type"
         "impl"
         "obj"
         "trigger"
     })
 
-    ["keyword.control.import"] = keywordListing(new Listing {
+    w.tableListing("keyword.control.import", new Listing {
         "import"
         "extract"
     })
 
-    ["keyword.other"] = keywordListing(new Listing {
+    w.tableListing("keyword.other", new Listing {
         "as"
         "in"
         "is"
     })
 
-    ["keyword.control.exception.deprecated"] = "error"
+    w.tableListing("keyword.control.exception.deprecated", "error")
 
-    ["keyword.other.deprecated"] = keywordListing(new Listing {
+    w.tableListing("keyword.other.deprecated", new Listing {
         "has"
         "sync"
     })
 
-    ["keyword.control.deprecated"] = keywordListing(new Listing {
+    w.tableListing("keyword.control.deprecated", new Listing {
         "switch"
         "case"
     })
 }
 
-function keywordListing(words: Listing<String>) = words.join("|")
-
 repository {
     ["keywords"] = w.group(new Listing {
         w.match("constant.language", #"\$"#)
 
-        for (tag, regex in keywords) {
-            w.match(tag, #"\b(\#(regex))\b"#)
+        for (entry in keywordTable) {
+            w.match(entry.first, #"\b(\#(entry.second))\b"#)
         }
     })
 }
