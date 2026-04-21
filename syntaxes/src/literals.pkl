@@ -1,7 +1,22 @@
 amends "../schema.pkl"
 import "../bindings.pkl" as w
 
-local function stringBlock(type: String, prefix: String?) =
+local literalTable = new Mapping {
+    ["stringRaw"] = Pair("raw", "r")
+    ["stringUnindent"] = Pair("unindent", "u")
+    ["stringBase64"] = Pair("base64", "64")
+    ["stringPlain"] = Pair("plain", null)
+
+    ["idExplicit"] = #"\d"#
+    ["idRandom"] = #"\?"#
+
+    ["numberBinary"] = Pair("bin", Pair("0b", "01"))
+    ["numberOctal"] = Pair("oct", Pair("0o", "0-7"))
+    ["numberHexadecimal"] = Pair("hex", Pair("0x", "0-9a-fA-F"))
+    ["numberDecimal"] = Pair("dec", Pair(null, "0-9"))
+}
+
+local function stringMatch(type: String, prefix: String?) =
     let (prefixed = prefix != null)
     let (multi = type == "unindent")
     let (raw = type == "raw")
@@ -57,22 +72,25 @@ local function numberMatch(base: String, prefix: String?, digits: String) =
 
 repository {
     ["literals"] = w.group(new Listing {
-        w.include("stringRaw")
-        w.include("stringUnindent")
-        w.include("stringBase64")
-        w.include("stringPlain")
-        w.include("idExplicit")
-        w.include("idRandom")
-        w.include("numberBinary")
-        w.include("numberOctal")
-        w.include("numberHexadecimal")
-        w.include("numberDecimal")
+        for (name, _ in literalTable) {
+            w.include(name)
+        }
     })
 
-    ["stringRaw"] = stringBlock("raw", "r")
-    ["stringUnindent"] = stringBlock("unindent", "u")
-    ["stringBase64"] = stringBlock("base64", "64")
-    ["stringPlain"] = stringBlock("plain", null)
+    // Add each type to the table in order.
+    for (name, entry in literalTable) {
+        when (name.startsWith("string")) {
+            [name] = stringMatch(entry.first, entry.second)
+        }
+
+        when (name.startsWith("id")) {
+            [name] = idMatch(entry)
+        }
+
+        when (name.startsWith("number")) {
+            [name] = numberMatch(entry.first, entry.second.first, entry.second.second)
+        }
+    }
 
     ["stringEscapes"] = w.group(new Listing {
         w.match(
@@ -85,12 +103,4 @@ repository {
             #"\\[^nrt'"\\u]|\\u(?!\{[0-9a-fA-F]{1,6}\})"#
         )
     })
-
-    ["idExplicit"] = idMatch(#"\d"#)
-    ["idRandom"] = idMatch(#"\?"#)
-
-    ["numberBinary"] = numberMatch("bin", "0b", "01")
-    ["numberOctal"] = numberMatch("oct", "0o", "0-7")
-    ["numberHexadecimal"] = numberMatch("hex", "0x", "0-9a-fA-F")
-    ["numberDecimal"] = numberMatch("dec", null, "0-9")
 }
