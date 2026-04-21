@@ -1,7 +1,22 @@
 amends "../schema.pkl"
 import "../bindings.pkl" as w
 
-local function stringBlock(type: String, prefix: String?) =
+local literalTable = new Listing {
+    w.Triple("str", "raw", "r")
+    w.Triple("str", "unindent", "u")
+    w.Triple("str", "base64", "64")
+    w.Triple("str", "plain", null)
+
+    Pair("id", #"\d"#)
+    Pair("id", #"\?"#)
+
+    w.Quad("num", "bin", "0b", "01")
+    w.Quad("num", "oct", "0o", "0-7")
+    w.Quad("num", "hex", "0x", "0-9a-fA-F")
+    w.Quad("num", "dec", null, "0-9")
+}
+
+local function stringMatch(type: String, prefix: String?) =
     let (prefixed = prefix != null)
     let (multi = type == "unindent")
     let (raw = type == "raw")
@@ -57,22 +72,20 @@ local function numberMatch(base: String, prefix: String?, digits: String) =
 
 repository {
     ["literals"] = w.group(new Listing {
-        w.include("stringRaw")
-        w.include("stringUnindent")
-        w.include("stringBase64")
-        w.include("stringPlain")
-        w.include("idExplicit")
-        w.include("idRandom")
-        w.include("numberBinary")
-        w.include("numberOctal")
-        w.include("numberHexadecimal")
-        w.include("numberDecimal")
-    })
+        for (entry in literalTable) {
+            when (entry.first == "str") {
+                stringMatch(entry.second, entry.third)
+            }
 
-    ["stringRaw"] = stringBlock("raw", "r")
-    ["stringUnindent"] = stringBlock("unindent", "u")
-    ["stringBase64"] = stringBlock("base64", "64")
-    ["stringPlain"] = stringBlock("plain", null)
+            when (entry.first == "id") {
+                idMatch(entry.second)
+            }
+
+            when (entry.first == "num") {
+                numberMatch(entry.second, entry.third, entry.fourth)
+            }
+        }
+    })
 
     ["stringEscapes"] = w.group(new Listing {
         w.match(
@@ -85,12 +98,4 @@ repository {
             #"\\[^nrt'"\\u]|\\u(?!\{[0-9a-fA-F]{1,6}\})"#
         )
     })
-
-    ["idExplicit"] = idMatch(#"\d"#)
-    ["idRandom"] = idMatch(#"\?"#)
-
-    ["numberBinary"] = numberMatch("bin", "0b", "01")
-    ["numberOctal"] = numberMatch("oct", "0o", "0-7")
-    ["numberHexadecimal"] = numberMatch("hex", "0x", "0-9a-fA-F")
-    ["numberDecimal"] = numberMatch("dec", null, "0-9")
 }

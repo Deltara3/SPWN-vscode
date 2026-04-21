@@ -70,3 +70,33 @@ function spanEx(tag: String?, start: Boundary, stop: Boundary, pats: PatternList
     endCaptures = stop.second
     patterns = pats
 }
+
+/// An ordered triple of elements.
+class Triple {
+    first: Any
+    second: Any
+    third: Any
+}
+
+/// Constructs a `Triple`.
+function Triple(a: Any, b: Any, c: Any) = new Triple {
+    first = a
+    second = b
+    third = c
+}
+
+/// An ordered quad of elements.
+class Quad {
+    first: Any
+    second: Any
+    third: Any
+    fourth: Any
+}
+
+/// Constructs a `Quad`.
+function Quad(a: Any, b: Any, c: Any, d: Any) = new Quad {
+    first = a
+    second = b
+    third = c
+    fourth = d
+}
