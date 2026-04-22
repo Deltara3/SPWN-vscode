@@ -9,6 +9,11 @@ function include(rule: String) = new Include {
     include = "#\(rule)"
 }
 
+/// Creates a new [Include] for `$self`.
+function self() = new Include {
+    include = "$self"
+}
+
 /// Creates a new [Group] of patterns.
 /// - [list]: The patterns to include.
 function group(list: PatternList) = new Group {

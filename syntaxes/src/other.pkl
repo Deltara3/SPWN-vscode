@@ -1,0 +1,14 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+repository {
+    ["punctuation"] = w.group(new Listing {
+        w.match("punctuation.terminator", #";"#)
+        w.match("punctuation.separator", #","#)
+        w.match("punctuation.accessor", #"(?<!\.)\.(?!\.)"#)
+        w.match("punctuation.accessor.namespace", #"::"#)
+        w.match("punctuation.separator.key-value", #":"#)
+    })
+
+    ["types"] = w.match("entity.name.type", #"@[a-zA-Z_]\w*|\?|\b_\b"#)
+}

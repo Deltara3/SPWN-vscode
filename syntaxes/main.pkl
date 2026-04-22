@@ -6,17 +6,15 @@ name = "SPWN"
 scopeName = "source.spwn"
 
 patterns {
-    w.include("root")
+    w.include("comments")
+    w.include("literals")
+    w.include("types")
+    w.include("keywords")
+    w.include("punctuation")
+    w.include("operators")
 }
 
 repository {
-    ["root"] = w.group(new Listing {
-        w.include("comments")
-        w.include("literals")
-        w.include("keywords")
-        w.include("operators")
-    })
-
     // Merge all files automagically.
     for (_, file in files) {
         ...file.repository!!
