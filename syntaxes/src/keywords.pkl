@@ -2,6 +2,7 @@ extends "../schema.pkl"
 import "../bindings.pkl" as w
 
 hidden keywordTable = new Listing {
+    w.tableListing("constant.language", #"\$"#)
     w.tableListing("keyword.control.exception", "throw")
     w.tableListing("variable.language", "self")
 
@@ -56,10 +57,12 @@ hidden keywordTable = new Listing {
 
 repository {
     ["keywords"] = w.group(new Listing {
-        w.match("constant.language", #"\$"#)
-
         for (entry in keywordTable) {
-            w.match(entry.first, #"\b(\#(entry.second))\b"#)
+            when (entry.second == #"\$"#) {
+                w.match(entry.first, entry.second)
+            } else {
+                w.match(entry.first, #"\b(\#(entry.second))\b"#)
+            }
         }
     })
 }

@@ -1,0 +1,253 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+import "keywords.pkl" as k
+
+repository {
+    ["blocks"] = w.group(new Listing {
+        w.include("triggerBlock")
+        w.include("curlyBlock")
+        w.include("directiveBlock")
+        w.include("arrayBlock")
+        w.include("functionDefinite")
+        w.include("functionAmbiguous")
+        w.include("functionCall")
+    })
+
+    ["triggerBlock"] = w.spanEx(null,
+        Pair(#"(!)(\{)"#, new Mapping {
+            ["1"] = w.capture("storage.modifier")
+            ["2"] = w.capture("punctuation.other.bracket.curly.begin")
+        }),
+
+        Pair(#"\}"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.curly.end")
+        }),
+
+        new Listing {
+            w.self()
+        }
+    )
+    
+    ["curlyBlock"] = w.spanEx(null,
+        Pair(#"\{"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.curly.begin")
+        }),
+
+        Pair(#"\}"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.curly.end")
+        }),
+
+        new Listing {
+            w.include("spaceHack")
+
+            w.spanEx(null,
+                Pair(#"(?=\w+\s*:(?!:)|\.{2})"#, null),
+                Pair(#"(?=\})"#, null),
+
+                new Listing {
+                    w.spanEx(null,
+                        Pair(#"\b([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*!\{)"#, new Mapping {
+                            ["1"] = w.capture("entity.name.function.macro")
+                            ["2"] = w.capture("punctuation.separator.key-value")
+                        }),
+
+                        Pair(#",|(?=\})|(?=;)"#, new Mapping {
+                            ["0"] = w.capture("punctuation.separator")
+                        }),
+                        
+                        new Listing {
+                            w.self()
+                        }
+                    )
+
+                    // Hack for match statements, should do this properly later.
+                    w.spanEx(null,
+                        Pair(#"\b(else)\b\s*(:)(?!:)"#, new Mapping {
+                            ["1"] = w.capture("keyword.control")
+                            ["2"] = w.capture("punctuation.separator.key-value")
+                        }),
+
+                        Pair(#",|(?=\})|(?=;)"#, null),
+
+                        new Listing {
+                            w.self()
+                        }
+                    )
+
+                    w.spanEx(null,
+                        Pair(#"\b(type)\b\s*(:)(?!:)"#, new Mapping {
+                            ["1"] = w.capture("storage.type")
+                            ["2"] = w.capture("punctuation.separator.key-value")
+                        }),
+
+                        Pair(#",|(?=\})|(?=;)"#, null),
+
+                        new Listing {
+                            w.self()
+                        }
+                    )
+
+                    w.spanEx(null,
+                        Pair(#"([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*\(.*\)\s*(?:->.*?)?\{)"#, new Mapping {
+                            ["1"] = w.captureEx(null, new Listing {
+                                w.include("overloads")
+                                w.match("entity.name.function", #"[a-zA-Z_]\w*"#)
+                            })
+                            
+                            ["2"] = w.capture("punctuation.separator.key-value")
+                        }),
+
+                        Pair(#",|(?=\})|(?=;)"#, new Mapping {
+                            ["0"] = w.capture("punctuation.separator")
+                        }),
+
+                        new Listing {
+                            w.self()
+                        }
+                    )
+
+                    w.spanEx(null,
+                        Pair(#"([a-zA-Z_]\w*)\s*(:)(?!:)"#, new Mapping {
+                            ["1"] = w.capture("variable.property")
+                            ["2"] = w.capture("punctuation.separator.key-value")
+                        }),
+
+                        Pair(#",|(?=\})|(?=;)"#, new Mapping {
+                            ["0"] = w.capture("punctuation.separator")
+                        }),
+
+                        new Listing {
+                            w.self()
+                        }
+                    )
+
+                    w.self()
+                }
+            )
+
+            w.spanEx(null,
+                Pair(#"(?=.)"#, null),
+                Pair(#"(?=\})"#, null),
+
+                new Listing {
+                    w.self()
+                }
+            )
+        }
+    )
+
+    ["directiveBlock"] = w.spanEx(null,
+        Pair(#"#\["#, new Mapping {
+            ["0"] = w.capture("keyword.directive.begin")
+        }),
+
+        Pair(#"\]"#, new Mapping {
+            ["0"] = w.capture("keyword.directive.end")
+        }),
+        
+        new Listing {
+            w.include("directives")
+            w.self()
+        }
+    )
+
+    ["arrayBlock"] = w.spanEx(null,
+        Pair(#"\["#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.square.begin")
+        }),
+
+        Pair(#"\]"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.square.end")
+        }),
+
+        new Listing {
+            w.self()
+        }
+    )
+
+    ["functionDefinite"] = w.spanEx(null,
+        Pair(#"(?<!\w\s*)\((?=\s*[a-zA-Z_]\w*\s*(?:,|:(?!:)|=(?![=>])|\)\s*(?:\{|=>)))"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.parameters.begin")
+        }),
+
+        Pair(#"\)"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.parameters.end")
+        }),
+
+        new Listing {
+            w.include("functionArguments")
+            w.self()
+        }
+    )
+
+    ["functionAmbiguous"] = w.spanEx(null, 
+        Pair(#"(?<!\w\s*)\("#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.round.begin")
+        }),
+
+        Pair(#"\)"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.round.end")
+        }),
+
+        new Listing {
+            w.spanEx(null,
+                Pair(#"(?=,|\s*[a-zA-Z_]\w*\s*(?:,|:(?!:)|=(?![=>])|\)\s*\{))"#, null),
+                Pair(#"(?=\))"#, null),
+
+                new Listing {
+                    w.include("functionArguments")
+                }
+            )
+
+            w.self()
+        }
+    )
+
+    ["functionCall"] = w.spanEx(null,
+        Pair(#"\("#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.round.begin")
+        }),
+        
+        Pair(#"\)"#, new Mapping {
+            ["0"] = w.capture("punctuation.other.bracket.round.end")
+        }),
+        
+        new Listing {
+            w.matchEx(null,
+                #"\b([a-zA-Z_]\w*)\s*(=)(?![=>])"#,
+                new Mapping {
+                    ["1"] = w.capture("variable.parameter")
+                    ["2"] = w.capture("keyword.operator.assignment")
+                }
+            )
+
+            w.self()
+        }
+    )
+
+    ["functionArguments"] = w.group(new Listing {
+        local self = k.keywordTable.toList().find((entry) -> entry.second == "self")
+        w.match(self.first, self.second)
+
+        w.spanEx(null,
+            Pair(#"b([a-zA-Z_]\w*)(?:\s*(?:(:(?!:))|(=(?![=>])))|\b)"#, new Mapping {
+                ["1"] = w.capture("variable.parameter")
+                ["2"] = w.capture("punctuation.separator.key-value")
+                ["3"] = w.capture("keyword.operator.assignment")
+            }),
+
+            Pair(#"(?=[,)])"#, null),
+
+            new Listing {
+                w.self()
+            }
+        )
+
+        w.self()
+    })
+
+    ["spaceHack"] = w.group(new Listing {
+        w.match("text", #"\s+"#)
+        w.match("text", #"\n$"#)
+    })
+}

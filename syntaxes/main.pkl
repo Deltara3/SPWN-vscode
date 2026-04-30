@@ -11,6 +11,7 @@ patterns {
     w.include("types")
     w.include("keywords")
     w.include("punctuation")
+    w.include("blocks")
     w.include("operators")
 }
 
