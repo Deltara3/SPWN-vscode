@@ -1,0 +1,73 @@
+open module schema
+
+// Docs are mostly for me, may help others.
+
+name: String?
+scopeName: String?
+patterns: PatternList?
+repository: PatternMap?
+
+/// Base class for all TextMate patterns.
+abstract class Pattern
+
+// Internal aliases.
+typealias PatternList = Listing<Pattern>
+typealias PatternMap = Mapping<String, Pattern>
+typealias CaptureMap = Mapping<String, Capture>
+
+/// A pattern with an optional scope applied.
+abstract class Named extends Pattern {
+    /// Scope to apply, appended with `.spwn` to form [name].
+    hidden scope: String?
+
+    /// Full scope applied to this pattern, derived from [scope].
+    name: String? = scope.ifNonNull((s) -> "\(s).spwn")
+}
+
+/// Matches a single occurrence a regex pattern.
+class Match extends Named {
+    /// Regex used to match against the input.
+    @SourceCode { language = "RegExp" }
+    match: String(isRegex) = ""
+
+    /// Captures indexed by group.
+    captures: CaptureMap?
+}
+
+/// Matches a range between two regex patterns.
+class Span extends Named {
+    /// Regex marking the start of the span.
+    @SourceCode { language = "RegExp" }
+    begin: String(isRegex)
+
+    /// Captures for the [begin] regex, indexed by group.
+    beginCaptures: CaptureMap?
+
+    /// Regex marking the end of the span.
+    @SourceCode { language = "RegExp" }
+    end: String(isRegex)
+
+    /// Captures for the [end] regex, indexed by group.
+    endCaptures: CaptureMap?
+
+    /// TextMate patterns to match within the span.
+    patterns: PatternList?
+}
+
+/// Groups patterns under a common name.
+class Group extends Named {
+    /// Patterns in this group.
+    patterns: PatternList
+}
+
+/// References another rule in the repository.
+class Include extends Pattern {
+    /// Rule to reference.
+    include: String
+}
+
+/// Captured group in a [Match] or [Span].
+class Capture extends Named {
+    /// Patterns to apply within the capture.
+    patterns: PatternList?
+}

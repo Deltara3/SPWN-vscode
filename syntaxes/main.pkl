@@ -1,0 +1,31 @@
+amends "schema.pkl"
+import "bindings.pkl" as w
+import* "src/*.pkl" as files
+
+name = "SPWN"
+scopeName = "source.spwn"
+
+patterns {
+    w.include("comments")
+    w.include("literals")
+    w.include("types")
+    w.include("keywords")
+    w.include("properties")
+    w.include("calls")
+    w.include("namespaces")
+    w.include("assignments")
+    w.include("punctuation")
+    w.include("blocks")
+    w.include("operators")
+    w.include("straggling")
+}
+
+repository {
+    // Merge all files automagically.
+    for (_, file in files) {
+        ...file.repository!!
+    }
+
+    // Hack to catch remaining identifiers at the cost of slightly less accuracy.
+    ["straggling"] = w.match("variable.other", #"\b[a-zA-Z_]\w*\b"#)
+}

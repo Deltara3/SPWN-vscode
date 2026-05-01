@@ -1,0 +1,101 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+local literalTable = new Listing {
+    w.Triple("str", "raw", "r")
+    w.Triple("str", "unindent", "u")
+    w.Triple("str", "base64", "64")
+    w.Triple("str", "plain", null)
+
+    Pair("id", #"\d"#)
+    Pair("id", #"\?"#)
+
+    w.Quad("num", "bin", "0b", "01")
+    w.Quad("num", "oct", "0o", "0-7")
+    w.Quad("num", "hex", "0x", "0-9a-fA-F")
+    w.Quad("num", "dec", null, "0-9")
+}
+
+local function stringMatch(type: String, prefix: String?) =
+    let (prefixed = prefix != null)
+    let (multi = type == "unindent")
+    let (raw = type == "raw")
+    let (group = if (prefixed) "2" else "1")
+
+    w.spanEx(
+        "string.quoted.\(type)",
+
+        Pair(if (prefixed) #"\b(\#(prefix))(['"])"# else #"(['"])"#, new Mapping {
+            when (prefixed) {
+                ["1"] = w.capture("storage.type.string")
+            }
+
+            [group] = w.capture("punctuation.definition.string.begin")
+        }),
+
+        Pair(if (multi) #"(\2)"# else #"(\\#(group))|(\n)"#, new Mapping {
+            ["1"] = w.capture("punctuation.definition.string.end")
+
+            when (!multi) {
+                ["2"] = w.capture("invalid.illegal.unclosed-string")
+            }
+        }),
+        
+        if (!raw) new Listing { w.include("stringEscapes") } else null
+    )
+
+local function idMatch(selector: String) =
+    let (scope = if (selector == #"\?"#) "entity.name.type" else "constant.numeric.id")
+
+    w.matchEx(null, 
+        #"(?<![a-zA-Z_])\#(selector)+([gbic])\b"#,
+        new Mapping {
+            ["0"] = w.capture(scope)
+            ["1"] = w.capture("storage.type.number")
+        }
+    )
+
+local function numberMatch(base: String, prefix: String?, digits: String) =
+    let (prefixed = prefix != null)
+    let (shared = #"[\#(digits)][\#(digits)_]*"#)
+
+    w.matchEx(null,
+        if (prefixed) #"\b(\#(prefix))\#(shared)\b"# else #"\b\#(shared)\b"#,
+        new Mapping {
+            ["0"] = w.capture("constant.numeric.\(base)")
+
+            when (prefixed) {
+                ["1"] = w.capture("storage.type.number")
+            }
+        }
+    )
+
+repository {
+    ["literals"] = w.group(new Listing {
+        for (entry in literalTable) {
+            when (entry.first == "str") {
+                stringMatch(entry.second, entry.third)
+            }
+
+            when (entry.first == "id") {
+                idMatch(entry.second)
+            }
+
+            when (entry.first == "num") {
+                numberMatch(entry.second, entry.third, entry.fourth)
+            }
+        }
+    })
+
+    ["stringEscapes"] = w.group(new Listing {
+        w.match(
+            "constant.character.escape",
+            #"\\([nrt'"]|u\{[0-9a-fA-F]{1,6}\})"#
+        )
+
+        w.match(
+            "invalid.illegal.escape",
+            #"\\[^nrt'"\\u]|\\u(?!\{[0-9a-fA-F]{1,6}\})"#
+        )
+    })
+}

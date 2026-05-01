@@ -1,0 +1,66 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+repository {
+    ["punctuation"] = w.group(new Listing {
+        w.match("punctuation.terminator", #";"#)
+        w.match("punctuation.separator", #","#)
+        w.match("punctuation.accessor", #"(?<!\.)\.(?!\.)"#)
+        w.match("punctuation.accessor.namespace", #"::"#)
+        w.match("punctuation.separator.key-value", #":"#)
+    })
+
+    ["types"] = w.match("entity.name.type", #"@[a-zA-Z_]\w*|\?|\b_\b"#)
+
+    ["calls"] = w.group(new Listing {
+        w.match("entity.name.function.macro", #"\b[a-zA-Z_]\w*!"#)
+        w.match("entity.name.function", #"\b[a-zA-Z_]\w*(?=\s*\()"#)
+    })
+
+    ["properties"] = w.group(new Listing {
+        w.match("storage.type", #"(?<=\.)(?<!\.{2})\btype\b"#)
+        w.include("overloads")
+        w.match("entity.name.function.macro", #"(?<=\.)(?<!\.{2})[a-zA-Z_]\w*!"#)
+        w.match("entity.name.function", #"(?<=\.)(?<!\.{2})[a-zA-Z_]\w*(?=\s*\()"#)
+        w.match("variable.property", #"(?<=\.)(?<!\.{2})[a-zA-Z_]\w*"#)
+    })
+
+    ["namespaces"] = w.group(new Listing {
+        w.matchEx(null,
+            #"(::)([a-zA-Z_]\w*)(?=::)"#,
+            new Mapping {
+                ["1"] = w.capture("punctuation.accessor.namespace")
+                ["2"] = w.capture("entity.name.namespace")
+            }
+        )
+
+        w.matchEx(null,
+            #"(::)([a-zA-Z_]\w*!)"#,
+            new Mapping {
+                ["1"] = w.capture("punctuation.accessor.namespace")
+                ["2"] = w.capture("entity.name.function.macro")
+            }    
+        )
+
+        w.matchEx(null,
+            #"(::)([a-zA-Z_]\w*)(?=\s*\()"#,
+            new Mapping {
+                ["1"] = w.capture("punctuation.accessor.namespace")
+                ["2"] = w.capture("entity.name.function")
+            }
+        )
+
+        w.matchEx(null,
+            #"(::)([a-zA-Z_]\w*)"#,
+            new Mapping {
+                ["1"] = w.capture("punctuation.accessor.namespace")
+                ["2"] = w.capture("variable.other.enummember")
+            }
+        )
+    })
+
+    ["assignments"] = w.group(new Listing {
+        w.match("entity.name.function.macro", #"\b[a-zA-Z_]\w*(?=\s*=\s*!)"#)
+        w.match("entity.name.function", #"\b[a-zA-Z_]\w*(?=\s*=\s*\(.*\)\s*(?:->.*?)?\{)"#)
+    })
+}

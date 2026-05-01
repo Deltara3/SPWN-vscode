@@ -1,0 +1,56 @@
+amends "../schema.pkl"
+import "../bindings.pkl" as w
+
+local operatorTable = new Listing {
+    w.tableListing("keyword.operator.assignment", "<=>")
+    w.tableListing("keyword.operator.relational", "->")
+    w.tableListing("storage.type.function", "=>")
+    w.tableListing("keyword.operator.range", #"\.\."#)
+    w.tableListing("keyword.operator.increment", #"\+\+"#)
+    w.tableListing("keyword.operator.decrement", #"\-\-"#)
+
+    w.tableListing("keyword.operator.comparison", new Listing {
+        "=="
+        "!="
+        ">="
+        "<="
+        ">"
+        "<"
+    })
+
+    w.tableListing("keyword.operator.logical", new Listing {
+        #"\|\|"#
+        "&&"
+        "!"
+        #"\|"#
+    })
+
+    w.tableListing("keyword.operator.assignment", new Listing {
+        "="
+        #"\+="#
+        #"\-="#
+        #"\*="#
+        #"\/="#
+        #"\^="#
+        "%="
+        #"\/%="#
+    })
+
+    w.tableListing("keyword.operator.arithmetic", new Listing {
+        #"\+"#
+        #"\-"#
+        #"\*\*"#
+        #"\/%"#
+        #"\/"#
+        #"\^"#
+        "%"
+    })
+}
+
+repository {
+    ["operators"] = w.group(new Listing {
+        for (entry in operatorTable) {
+            w.match(entry.first, #"(\#(entry.second))"#)
+        }
+    })
+}

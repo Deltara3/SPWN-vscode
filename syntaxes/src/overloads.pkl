@@ -1,0 +1,61 @@
+extends  "../schema.pkl"
+import "../bindings.pkl" as w
+
+hidden directiveTable = new Listing {
+    "no_std"
+    "cache_output"
+    "example"
+    "constructor"
+    "desc"
+}
+
+hidden overloadTable = new Listing {
+    "equal"
+    "not_equal"
+    "more_or_equal"
+    "less_or_equal"
+    "more_than"
+    "less_than"
+    "or"
+    "and"
+    "not"
+    "negate"
+    "assign"
+    "add"
+    "subtract"
+    "multiply"
+    "divide"
+    "exponate"
+    "modulate"
+    "intdivide"
+    "swap"
+    "plus"
+    "minus"
+    "times"
+    "intdivided_by"
+    "divided_by"
+    "pow"
+    "mod"
+    "either"
+    "increment"
+    "pre_increment"
+    "decrement"
+    "pre_decrement"
+    "display"
+    "as"
+    "has"
+    "range"
+    "unary_range"
+}
+
+repository {
+    ["overloads"] = w.match(
+        "support.function.magic",
+        #"\b_(\#(overloadTable.toList().join("|")))_\b"#
+    )
+
+    ["directives"] = w.match(
+        "support.function.directive",
+        #"\b(\#(directiveTable.toList().join("|")))\b"#
+    )
+}

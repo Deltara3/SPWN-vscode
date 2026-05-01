@@ -1,0 +1,68 @@
+extends "../schema.pkl"
+import "../bindings.pkl" as w
+
+hidden keywordTable = new Listing {
+    w.tableListing("constant.language", #"\$"#)
+    w.tableListing("keyword.control.exception", "throw")
+    w.tableListing("variable.language", "self")
+
+    w.tableListing("constant.language", new Listing {
+        "true"
+        "false"
+        "null"
+    })
+
+    w.tableListing("keyword.control", new Listing {
+        "let"
+        "if"
+        "else"
+        "while"
+        "for"
+        "break"
+        "continue"
+        "match"
+        "return"
+    })
+
+    w.tableListing("storage.type", new Listing {
+        "type"
+        "impl"
+        "obj"
+        "trigger"
+    })
+
+    w.tableListing("keyword.control.import", new Listing {
+        "import"
+        "extract"
+    })
+
+    w.tableListing("keyword.other", new Listing {
+        "as"
+        "in"
+        "is"
+    })
+
+    w.tableListing("keyword.control.exception.deprecated", "error")
+
+    w.tableListing("keyword.other.deprecated", new Listing {
+        "has"
+        "sync"
+    })
+
+    w.tableListing("keyword.control.deprecated", new Listing {
+        "switch"
+        "case"
+    })
+}
+
+repository {
+    ["keywords"] = w.group(new Listing {
+        for (entry in keywordTable) {
+            when (entry.second == #"\$"#) {
+                w.match(entry.first, entry.second)
+            } else {
+                w.match(entry.first, #"\b(\#(entry.second))\b"#)
+            }
+        }
+    })
+}
