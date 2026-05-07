@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.1
+- Fixed directives on macros and trigger functions breaking highlighting.
+
 ## 0.2.0
 - Total rewrite in Pkl, hopefully easier to work with.
 
