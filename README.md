@@ -11,6 +11,7 @@ While it's by no means perfect, it's 100% better than the originals.
 
 ## Known Issues
 - IIFEs are highlighted as functions. Due to limitations in TextMate, this may not be fixable.
+- Multiline directives break highlighting on macros and trigger functions, likely not fixable without a bunch of work.
 
 ## Help
 While I tried to support as much as possible, I may have missed stuff.

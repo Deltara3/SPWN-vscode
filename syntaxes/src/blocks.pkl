@@ -73,7 +73,7 @@ repository {
                     )
 
                     w.spanEx(null,
-                        Pair(#"\b([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*!\{)"#, new Mapping {
+                        Pair(#"\b([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*(?:#\[.*\]\s*)?!\{)"#, new Mapping {
                             ["1"] = w.capture("entity.name.function.macro")
                             ["2"] = w.capture("punctuation.separator.key-value")
                         }),
@@ -88,7 +88,7 @@ repository {
                     )
 
                     w.spanEx(null,
-                        Pair(#"([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*\(.*\)\s*(?:->.*?)?\{)"#, new Mapping {
+                        Pair(#"(?:#\[.*?\]\s*)?([a-zA-Z_]\w*)\s*(:)(?!:)(?=\s*(?:#\[.*\]\s*)?\(.*\)\s*(?:->.*?)?\{)"#, new Mapping {
                             ["1"] = w.captureEx(null, new Listing {
                                 w.include("overloads")
                                 w.match("entity.name.function", #"[a-zA-Z_]\w*"#)
