@@ -60,7 +60,7 @@ repository {
     })
 
     ["assignments"] = w.group(new Listing {
-        w.match("entity.name.function.macro", #"\b[a-zA-Z_]\w*(?=\s*=\s*!)"#)
-        w.match("entity.name.function", #"\b[a-zA-Z_]\w*(?=\s*=\s*\(.*\)\s*(?:->.*?)?\{)"#)
+        w.match("entity.name.function.macro", #"\b[a-zA-Z_]\w*(?=\s*=\s*(?:#\[.*\]\s*)?!)"#)
+        w.match("entity.name.function", #"\b[a-zA-Z_]\w*(?=\s*=\s*(?:#\[.*\]\s*)?\(.*\)\s*(?:->.*?)?\{)"#)
     })
 }
