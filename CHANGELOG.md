@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.2
+- Added missing script attributes.
+
 ## 0.2.1
 - Fixed directives on macros and trigger functions breaking highlighting.
 
