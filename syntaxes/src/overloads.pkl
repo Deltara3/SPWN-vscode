@@ -4,6 +4,8 @@ import "../bindings.pkl" as w
 hidden directiveTable = new Listing {
     "no_std"
     "cache_output"
+    "console_output"
+    "no_level"
     "example"
     "constructor"
     "desc"
